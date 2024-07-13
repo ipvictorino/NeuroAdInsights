@@ -1,6 +1,5 @@
 <input-overview>
-You are now provided with the attention heatmap of the same image. The attention heatmap illustrates the distribution of attention as predicted by an AI model that was trained on eye-tracking data. Red colour indicates high
-attention, green implies moderate level and transparent colours mean low attention. Please do not confuse the heatmap colours, i.e. the red, yellow, green blobs etc. with the actual colours of the video frames.
+You are now provided with the attention heatmap of the same image. The attention heatmap illustrates the distribution of attention as predicted by an AI model that was trained on eye-tracking data. Red colour indicates high attention, green implies moderate level and transparent colours mean low attention. Please do not confuse the heatmap colours, i.e. the red, yellow, green blobs etc. with the actual colours of the video frames.
 </input-overview>
 
 <task>
@@ -12,9 +11,9 @@ Based on the provided heatmap, identify the most visually salient elements, i.e.
 Provide the output in the following JSON format
 ```
 [
-{
-"saliency_description":$description
-}
+    {
+        "saliency_description":$description
+    }
 ]
 ```
 In this format, $description is a placeholder for the description of the visually salient elements in the advertisement.

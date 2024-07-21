@@ -1,3 +1,6 @@
 streamlit
+streamlit_extras
 openai
 langchain
+fastapi
+uvicorn

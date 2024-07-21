@@ -43,8 +43,15 @@ NeuroAdInsights is a neuromarketing tool designed to generate insights into the 
     Generate an API key on the API keys [page](https://platform.openai.com/account/api-keys) and store it securely.
 
 3.3. Set up Environment Variable:
-    ```sh
+
+    ```bash
     export OPENAI_API_KEY='your_openai_api_key'
+    ```
+    
+  Or
+    
+    ```sh
+    set OPENAI_API_KEY='your_openai_api_key'
     ```
 
 ## Usage :rocket:

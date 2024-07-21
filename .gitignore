@@ -1,3 +1,4 @@
 .env
 ML_Engineer_Assignment.pdf
 data/answers/
+__pycache__/

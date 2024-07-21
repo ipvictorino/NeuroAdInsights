@@ -63,7 +63,7 @@ NeuroAdInsights is a neuromarketing tool designed to generate insights into the 
 ## Project Structure :file_folder:
 
 - `main.py`: Contains the FastAPI backend logic for processing images and heatmaps.
-- `app.py`: Streamlit application for user interaction.
+- `streamlit/app.py`: Streamlit application for user interaction.
 - `orchestrator.py`: Contains the core logic for processing prompts and interacting with the LLM.
 - `data/prompts`: Directory containing prompt templates.
 - `data/images`: Directory for storing uploaded images and heatmaps.

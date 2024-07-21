@@ -17,3 +17,4 @@ Provide the output in the following JSON format
 ]
 ```
 In this format, $description is a placeholder for the description of the visually salient elements in the advertisement.
+</response-template>

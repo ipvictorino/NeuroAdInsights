@@ -21,3 +21,4 @@ Provide the output in the following JSON format
 ]
 ```
 In this format, $description is a placeholder for assessment of the cognitive load induced by the advertisement in viewers.
+</response-template>

@@ -24,3 +24,4 @@ Provide the final output in the following JSON format
 ]
 ```
 In this format, $ad_description, $ad_purpose, $saliency_description and $cognitive_description are placeholders for the summarised versions of the text provided as input.
+</response-template>

@@ -12,7 +12,12 @@ from pathlib import Path
 from typing import List, Tuple, Union
 import logging
 
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.WARNING)
+
+logger = logging.getLogger("LangChainWorkflow")
+logger.setLevel(logging.DEBUG)
+
+logging.getLogger("httpx").setLevel(logging.WARNING)
 
 # Path to prompts
 path_for_prompt = Path(__file__).parent / "data" / "prompts"
@@ -46,6 +51,7 @@ def process_prompt(prompt_text: str) -> Union[SystemMessage, HumanMessage]:
 
 class LangChainWorkflow:
     def __init__(self, openai_api_key: str, deployment_name: str):
+        logger.info("Initialising LangChainWorkflow...")
         self.openai_api_key = openai_api_key
         self.deployment_name = deployment_name
 
@@ -56,6 +62,8 @@ class LangChainWorkflow:
         openai_api_key: str = '',
         deployment_name: str = '',
     ) -> ChatOpenAI:
+        
+        logger.debug("Creating LLM...")
         if not openai_api_key:
             openai_api_key = self.openai_api_key
         if not deployment_name:
@@ -71,6 +79,7 @@ class LangChainWorkflow:
         # Test llm
         try:
             llm.invoke("0")
+            logger.debug("LLM created successfully.")
         except Exception as e:
             raise Exception(f"An error occurred while creating the LLM: {e}")
         return llm
@@ -107,6 +116,7 @@ class LangChainWorkflow:
             }
         }
 
+        logger.info("Processing prompts for tasks A1, A2, B, and C...")
         messages_a1_original = process_prompt(prompt_a1_text)
         messages_a2_original = process_prompt(prompt_a2_text)
         messages_b_original = process_prompt(prompt_b_text)
@@ -119,23 +129,34 @@ class LangChainWorkflow:
         messages_a1[-1].content.append(original_image)
         messages_a2[-1].content.append(heatmap_image)
         messages_b[-1].content.append(original_image)
+        logger.info("Prompts processed and images appended successfully")
 
         # Chain of thought - Provide image and ask model to describe key elements of advert + Provide corresponding attention heatmap and ask model to describe the most visually salient elements based on the heatmap.
+        logger.info("Running Task A - Chain of thought...")
+        logger.debug("\tTask A1 - Describe key elements of advert (description and purpose)")
         response = self.process_prompt(llm, messages_a1)
+        logger.debug("\tTask A2 - Describe visually salient elements based on heatmap.")
         response_a = self.process_prompt(
             llm, messages_a1_original + [response] + messages_a2, append_answers=True)
 
+
         # Provide image and ask model to assess perceptual/cognitive load of the asset.
+        logger.info("Running Task B - Cognitive load...")
         response_b = self.process_prompt(llm, messages_b)
 
         # Feed output from Processes A & B and ask model to summarise the information and ensure that the final output has the desired JSON format.
+        logger.info("Running Task C - Summarise information...")
         response_c = self.process_prompt(
             llm, messages_c + [response_a, response_b], append_answers=True)
+        
+        # TODO Parallelize calls A and B using chain
+        logger.info("Tasks A, B and C completed successfully.")
+        
         return response_a, response_b, response_c
 
 
 def resize_image(image_data):
-    logging.error("Image size is too large. Must be less than 20 MB in size.")
+    logger.error("Image size is too large. Must be less than 20 MB in size.")
     return image_data  # TODO: Implement resizing logic
 
 
@@ -164,6 +185,6 @@ if __name__ == "__main__":
     response_a, response_b, response_c = langchai_handler.run(
         image_base64_str, heatmap_base64_str)
 
-    print(f"\nResponse A: {response_a.content}")
-    print(f"\nResponse B: {response_b.content}")
-    print(f"\nResponse C: {response_c.content}")
+    logger.info(f"- Response A: {response_a.content}")
+    logger.info(f"- Response B: {response_b.content}")
+    logger.info(f"- Response C: {response_c.content}")

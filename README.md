@@ -17,13 +17,7 @@
 ## Overview :book:
 NeuroAdInsights is a neuromarketing tool designed to generate insights into the visual salience and cognitive load of marketing assets using Large Language Models (LLMs). By processing images and attention heatmaps, this tool provides detailed analyses that can help optimize marketing strategies.
 
-
-
-https://github.com/user-attachments/assets/82421939-4a26-43be-924b-165ecddcc930
-
-
-
-
+![NeuroAdInsights](https://github.com/user-attachments/assets/b6dcf0e3-4056-44af-b839-4fd2a97737b7)
 
 
 

@@ -2,5 +2,6 @@ streamlit
 streamlit_extras
 openai
 langchain
+langchain-openai
 fastapi
 uvicorn

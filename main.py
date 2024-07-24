@@ -51,7 +51,9 @@ async def process_image(
     image_file: Optional[UploadFile] = File(None),
     heatmap_file: Optional[UploadFile] = File(None),
 ):
-
+    ##############################
+    # Step 1: Read image and heatmap
+    ##############################
     logger.info("Starting image reading...")
     images_dir = Path(__file__).parent / "data" / "images"
 
@@ -94,12 +96,17 @@ async def process_image(
             status_code=400, detail="Image and heatmap files are required")
     logger.info(f"Image reading completed successfully.")
 
-    # Initialize the LangChainWorkflow
+    ##############################
+    # Step 2: Initialize LangChainWorkflow
+    ##############################
     workflow = LangChainWorkflow(
         openai_api_key=os.getenv("OPENAI_API_KEY"),
         deployment_name="gpt-4o"
     )
-    # return ["answer1", "answer"]
+    
+    ##############################
+    # Step 3: Run LangChainWorkflow
+    ##############################
     response_a, response_b, response_c = workflow.run(
         image_base64_str, heatmap_base64_str)
 

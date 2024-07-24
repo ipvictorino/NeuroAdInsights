@@ -99,6 +99,10 @@ class LangChainWorkflow:
 
     def run(self, image_base64_str: str, heatmap_base64_str: str) -> Tuple[AIMessage, AIMessage, AIMessage]:
 
+        ########################################################
+        # Step 1: Create LLM
+        ########################################################
+
         llm = self.create_llm()
 
         # TODO: Automatically define image extension png jpeg etc
@@ -116,6 +120,10 @@ class LangChainWorkflow:
             }
         }
 
+        ########################################################
+        # Step 2: Process Prompts and create list of messages
+        ########################################################
+
         logger.info("Processing prompts for tasks A1, A2, B, and C...")
         messages_a1_original = process_prompt(prompt_a1_text)
         messages_a2_original = process_prompt(prompt_a2_text)
@@ -131,7 +139,11 @@ class LangChainWorkflow:
         messages_b[-1].content.append(original_image)
         logger.info("Prompts processed and images appended successfully")
 
-        # Chain of thought - Provide image and ask model to describe key elements of advert + Provide corresponding attention heatmap and ask model to describe the most visually salient elements based on the heatmap.
+        ########################################################
+        # Step 3: Process prompts using LLM 
+        ########################################################
+
+        # 3.1 Chain - Provide image and ask model to describe key elements of advert + Provide corresponding attention heatmap and ask model to describe the most visually salient elements based on the heatmap.
         logger.info("Running Task A - Chain of thought...")
         logger.debug("\tTask A1 - Describe key elements of advert (description and purpose)")
         response = self.process_prompt(llm, messages_a1)
@@ -140,11 +152,11 @@ class LangChainWorkflow:
             llm, messages_a1_original + [response] + messages_a2, append_answers=True)
 
 
-        # Provide image and ask model to assess perceptual/cognitive load of the asset.
+        # 3.2 Provide image and ask model to assess perceptual/cognitive load of the asset.
         logger.info("Running Task B - Cognitive load...")
         response_b = self.process_prompt(llm, messages_b)
 
-        # Feed output from Processes A & B and ask model to summarise the information and ensure that the final output has the desired JSON format.
+        # 3.3. Feed output from Processes A & B and ask model to summarise the information and ensure that the final output has the desired JSON format.
         logger.info("Running Task C - Summarise information...")
         response_c = self.process_prompt(
             llm, messages_c + [response_a, response_b], append_answers=True)
